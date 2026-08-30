@@ -33,7 +33,7 @@ if ((hasInterface && isServer) || (serverCommandAvailable "#kick")) then {
     0                                                  // local setting
 ] call CBA_fnc_addSetting;
 
-["vnd_fiberTTL", "SLIDER",   ["Dead‑fiber lifetime (s)",   "0 = disabled"], "Fiber-Optic FPV", [0, 120, 60, 0], 0] call CBA_fnc_addSetting;
+["vnd_fiberTTL", "SLIDER", ["Dead-fiber lifetime (s)", "0 = disabled"], "Fiber-Optic FPV", [0, 120, 60, 0], 0] call CBA_fnc_addSetting;
 
 
 private _droneClasses = [

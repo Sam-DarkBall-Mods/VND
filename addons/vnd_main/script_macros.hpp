@@ -1,8 +1,6 @@
 #ifndef VND_MAIN_SCRIPT_MACROS_HPP
 #define VND_MAIN_SCRIPT_MACROS_HPP
 
-#include "\x\cba\addons\main\script_macros_common.hpp"
-
 #define GETMVAR(NAME,DEFAULT) (missionNamespace getVariable [#NAME, DEFAULT])
 #define SETMVAR(NAME,VALUE) (missionNamespace setVariable [#NAME, VALUE])
 #define SETMVAR_PUBLIC(NAME,VALUE) (missionNamespace setVariable [#NAME, VALUE, true])

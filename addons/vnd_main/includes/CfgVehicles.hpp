@@ -397,6 +397,9 @@ class CfgVehicles
 		}; \
 	};
 
+	#define QUOTE_INNER(value) #value
+	#define QUOTE(value) QUOTE_INNER(value)
+
 	// ================== DRONE MACRO ==================
 	#define KVN_VARIANT(CLASS, BASE, SIDEID, FACTION, CREW, DNAME, PREVIEW, MODEL_PATH, BAGCLASS) \
 	class CLASS: BASE { \
@@ -408,7 +411,7 @@ class CfgVehicles
 			primary = 0; \
 			base = ""; \
 			assembleTo = ""; \
-			dissasembleTo[] = { BAGCLASS }; \
+			dissasembleTo[] = { QUOTE(BAGCLASS) }; \
 			displayName = ""; \
 		}; \
 	};
@@ -424,7 +427,7 @@ class CfgVehicles
 			primary = 0; \
 			base = ""; \
 			assembleTo = ""; \
-			dissasembleTo[] = { BAGCLASS }; \
+			dissasembleTo[] = { QUOTE(BAGCLASS) }; \
 			displayName = ""; \
 		}; \
 		class ViewOptics: ViewOptics { visionMode[] = {"Normal", "Ti"}; thermalMode[] = {0,1}; }; \

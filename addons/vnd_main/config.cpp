@@ -16,7 +16,7 @@ class CfgPatches
 			"cba_xeh_a3",
 			"cba_settings"
 		};
-		requiredVersion = 0.1;
+		requiredVersion = 2.22;
 		units[] =
 		{
 			"O_KVN_AT",      "O_KVN_AP",
