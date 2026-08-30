@@ -2,26 +2,31 @@
 
 [![CI](https://github.com/Sam-DarkBall-Mods/VND/actions/workflows/ci.yml/badge.svg)](https://github.com/Sam-DarkBall-Mods/VND/actions/workflows/ci.yml)
 
-Fiber-optic FPV drone system for Arma 3.
+VND adds KVN fiber optic FPV drones. AT and AP versions are available for all
+three sides, with normal and thermal variants. The fiber path is updated during
+flight, synchronized in multiplayer and can remain visible for a configurable
+time after the drone is destroyed.
+
+The mod also contains the FPV display, inventory packing and the connection
+logic used when the operator takes or releases control.
 
 ## Requirements
 
 - Arma 3 2.22 or newer
-- Additional runtime dependencies declared by `CfgPatches`
+- CBA_A3
 
-## Development
+## Building
 
 ```bash
+python3 -B -m unittest discover -s tests -p "test_*.py" -v
 hemtt check
 hemtt build --no-bin
-python3 -B -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-Legacy `CfgPatches`, function names, virtual PBO prefixes, and release PBO
-filenames are compatibility contracts and must not change in a patch release.
+The release stays compatible with the `vnd_main` prefix and existing KVN
+class names.
 
 ## License
 
-SQF, Arma configuration, and tooling are GPL-2.0-or-later. Original Arma
-models, textures, materials, animations, and audio are APL-SA. See
-[LICENSES.md](LICENSES.md) and closer notices.
+Code and configs use GPL-2.0-or-later. Original models, textures, materials,
+animations and audio use APL-SA. See [LICENSES.md](LICENSES.md).
