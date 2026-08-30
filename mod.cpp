@@ -1,4 +1,9 @@
 name = "VND 1.0.0";
+picture = "kvn128.paa";
+logo = "kvn128.paa";
+logoOver = "kvn128.paa";
+logoSmall = "kvn128.paa";
+overviewPicture = "kvn128.paa";
 actionName = "GitHub";
 action = "https://github.com/Sam-DarkBall-Mods/VND";
 description = "VND - Version 1.0.0";
