@@ -10,7 +10,6 @@ if (isNull _uav) exitWith {};
     },
     {
         params ["_uav"];
-        _uav disableAI "ALL";
         _uav setVariable ["DB_jammer_customUavBehavior", true, true];
     },
     [_uav]
