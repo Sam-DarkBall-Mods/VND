@@ -1,22 +1,13 @@
+#include "\vnd_main\script_macros.hpp"
+
 params ["_uav"];
 
 if (isNull _uav) exitWith {};
+if !(local _uav) exitWith {};
+if (_uav getVariable ["vnd_destroyHandled", false]) exitWith {};
 
-private _dronesArray = missionNamespace getVariable ["DB_vnd_fpv_dronesArray", []];
+private _dronesArray = GETMVAR(DB_vnd_fpv_dronesArray, []);
 if !(typeOf _uav in _dronesArray) exitWith {};
-
-private _path = _uav getVariable ["vnd_fiber_path", []];
-if !(_path isEqualTo []) then {
-    private _ttl = missionNamespace getVariable ["vnd_fiberTTL", 60];
-	private _now = time;
-	missionNamespace setVariable [
-		"vnd_deadFibers",
-		(missionNamespace getVariable ["vnd_deadFibers", []]) + [[_path, _now + _ttl, _now]],
-		true
-	];
-};
-
-cutText ["", "PLAIN"];
 
 private _killer     = driver _uav;
 private _instigator = (UAVControl _uav) # 0;
@@ -31,10 +22,29 @@ if (_uavType find "at" > -1) then {
 	};
 };
 
-if (local _killer) then {
-	_killer setCaptive false;
-} else {
-	[_killer, false] remoteExec ["setCaptive", 2];
+if (_missileType isEqualTo "") exitWith {
+    deleteVehicle _uav;
+};
+
+_uav setVariable ["vnd_destroyHandled", true, false];
+
+private _path = _uav getVariable ["vnd_fiber_path", []];
+if !(_path isEqualTo []) then {
+    private _ttl = GETMVAR(vnd_fiberTTL, 60);
+    private _now = time;
+    private _deadFibers = +GETMVAR(vnd_deadFibers, []);
+    _deadFibers pushBack [_path, _now + _ttl, _now];
+    SETMVAR_PUBLIC(vnd_deadFibers, _deadFibers);
+};
+
+cutText ["", "PLAIN"];
+
+if !(isNull _killer) then {
+    if (local _killer) then {
+        _killer setCaptive false;
+    } else {
+        [_killer, false] remoteExecCall ["setCaptive", _killer];
+    };
 };
 
 private _missile = createVehicle [_missileType, _uav modelToWorld [0,0,0]];
@@ -47,13 +57,13 @@ _missile setVectorDirAndUp [vectorDir _uav, vectorUp _uav];
 deleteVehicle _uav;
 
 [
-	{
-		_this params ["_missile", "_shotParents"];
-		(getShotParents _missile) isEqualTo _shotParents
-	},
-	{
-		_this params ["_missile"];
-		triggerAmmo _missile
-	},
-	[_missile, [_killer, _instigator]]
+    {
+        _this params ["_missile", "_shotParents"];
+        (getShotParents _missile) isEqualTo _shotParents
+    },
+    {
+        _this params ["_missile"];
+        triggerAmmo _missile
+    },
+    [_missile, [_killer, _instigator]]
 ] call CBA_fnc_waitUntilAndExecute;

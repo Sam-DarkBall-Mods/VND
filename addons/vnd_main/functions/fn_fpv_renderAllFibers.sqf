@@ -1,22 +1,31 @@
-if (isNil "vnd_renderEH") then
-{
-    vnd_renderEH = addMissionEventHandler ["Draw3D",
-    {
-        if !(missionNamespace getVariable ["vnd_showFiber", true]) exitWith {};
+#include "\vnd_main\script_macros.hpp"
 
-        private _dClasses = missionNamespace getVariable ["DB_vnd_fpv_dronesArray", []];
-        private _pl = missionNamespace getVariable ["bis_fnc_moduleRemoteControl_unit", player];
+if (!hasInterface) exitWith {};
+
+private _renderEh = GETMVAR(vnd_renderEH, -1);
+if (_renderEh < 0) then
+{
+    _renderEh = addMissionEventHandler ["Draw3D",
+    {
+        if !(GETMVAR(vnd_showFiber, true)) exitWith {};
+
+        private _dClasses = GETMVAR(DB_vnd_fpv_dronesArray, []);
+        private _pl = GETMVAR(bis_fnc_moduleRemoteControl_unit, player);
+        if (isNull _pl) then {
+            _pl = player;
+        };
+
+        private _controlledUav = getConnectedUAV _pl;
 
         {
             if (typeOf _x in _dClasses) then {
+                if (_x != _controlledUav && { _pl distance _x > VND_FIBER_DRAW_DISTANCE }) then {
+                    continue;
+                };
+
                 private _path = _x getVariable ["vnd_fiber_path", []];
                 if !(_path isEqualTo []) then {
-                    private _last = _x getVariable ["vnd_lastSagLocal", time];
-                    private _dt   = time - _last;
-                    _x setVariable ["vnd_lastSagLocal", time];
-
                     private _nodes = _path + [_x modelToWorldVisual [0,-0.10,0.0825]];
-                    _nodes = [_nodes, _dt] call DB_vnd_fnc_fpv_applyGravity;
 
                     [_nodes] call DB_vnd_fnc_fpv_drawFiberPath;
                 };
@@ -24,7 +33,7 @@ if (isNil "vnd_renderEH") then
         } forEach allUnitsUAV;
 
 
-        private _dead = missionNamespace getVariable ["vnd_deadFibers", []];
+        private _dead = GETMVAR(vnd_deadFibers, []);
         private _newDead = [];
 
         {
@@ -43,6 +52,8 @@ if (isNil "vnd_renderEH") then
             };
         } forEach _dead;
 
-        missionNamespace setVariable ["vnd_deadFibers", _newDead, false];
+        SETMVAR(vnd_deadFibers, _newDead);
     }];
+
+    SETMVAR(vnd_renderEH, _renderEh);
 };
